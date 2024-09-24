@@ -13,19 +13,21 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:orientation="horizontal"
-        android:layout_weight="10">
+        android:orientation="vertical"
+        android:layout_weight="2">
 
         <Button
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_weight="5"
+            android:id="@+id/btnPhoto"
+            android:text="take photo"/>
+
+        <TextView
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_weight="1"
-            android:id="@+id/btnPhoto"/>
-
-        <Button
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_weight="1" />
+            android:id="@+id/tvResult"/>
 
     </LinearLayout>
 
