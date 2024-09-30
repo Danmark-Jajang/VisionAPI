@@ -1,6 +1,7 @@
 package com.example.visionapi
 
 import android.Manifest
+import android.annotation.SuppressLint
 import android.content.ContentValues
 import android.content.Context
 import android.content.pm.PackageManager
@@ -9,7 +10,12 @@ import android.os.Build
 import android.os.Bundle
 import android.provider.MediaStore
 import android.util.Log
+import android.view.View
+import android.widget.AdapterView
+import android.widget.AdapterView.OnItemClickListener
+import android.widget.ListAdapter
 import android.widget.TextView
+import android.widget.Toast
 import androidx.activity.enableEdgeToEdge
 import androidx.annotation.OptIn
 import androidx.appcompat.app.AppCompatActivity
@@ -23,17 +29,21 @@ import androidx.camera.core.Preview
 import androidx.camera.lifecycle.ProcessCameraProvider
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
+import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.visionapi.databinding.ActivityCameraBinding
 import com.google.mlkit.vision.common.InputImage
 import com.google.mlkit.vision.text.Text
 import com.google.mlkit.vision.text.TextRecognition
 import com.google.mlkit.vision.text.korean.KoreanTextRecognizerOptions
+import kotlinx.coroutines.currentCoroutineContext
 import java.util.Locale
 import java.util.concurrent.ExecutorService
 import java.util.concurrent.Executors
 
 class CameraActivity : AppCompatActivity() {
     lateinit var binding: ActivityCameraBinding
+    lateinit var itemList : ArrayList<OCRText>
+    lateinit var textAdapter: TextAdapter
     private var imageCapture: ImageCapture? = null
 
     private lateinit var cameraExecutor: ExecutorService
@@ -58,8 +68,24 @@ class CameraActivity : AppCompatActivity() {
         cameraExecutor = Executors.newSingleThreadExecutor()
 
         binding.btnPhoto.setOnClickListener { takePhoto() }
-    }
 
+        //recyclerView 초기화
+        itemList = ArrayList()
+        textAdapter = TextAdapter(itemList)
+        binding.tvResult.layoutManager = LinearLayoutManager(this)
+        binding.tvResult.adapter = textAdapter
+
+        //recyclerView 커스텀 Listener
+        var searcher : SearchItem = SearchItem(this@CameraActivity)
+        textAdapter.setOnItemClickListener(object : TextAdapter.onItemClickListener{
+            override fun onItemClick(view: View, position: Int) {
+                searcher.searchItem(itemList[position])
+            }
+
+        })
+
+
+    }
     private fun startCamera() {
         val cameraProviderFuture = ProcessCameraProvider.getInstance(this)
 
@@ -98,13 +124,13 @@ class CameraActivity : AppCompatActivity() {
         // Create time stamped name and MediaStore entry.
         val name = SimpleDateFormat(FILENAME_FORMAT, Locale.US)
             .format(System.currentTimeMillis())
-        val contentValues = ContentValues().apply {
-            put(MediaStore.MediaColumns.DISPLAY_NAME, name)
-            put(MediaStore.MediaColumns.MIME_TYPE, "image/jpeg")
-            if(Build.VERSION.SDK_INT > Build.VERSION_CODES.P) {
-                put(MediaStore.Images.Media.RELATIVE_PATH, "Pictures/CameraX-Image")
-            }
-        }
+//        val contentValues = ContentValues().apply {
+//            put(MediaStore.MediaColumns.DISPLAY_NAME, name)
+//            put(MediaStore.MediaColumns.MIME_TYPE, "image/jpeg")
+//            if(Build.VERSION.SDK_INT > Build.VERSION_CODES.P) {
+//                put(MediaStore.Images.Media.RELATIVE_PATH, "Pictures/CameraX-Image")
+//            }
+//        }
 
         imageCapture.takePicture(
             ContextCompat.getMainExecutor(this),
@@ -147,6 +173,7 @@ class CameraActivity : AppCompatActivity() {
 
     }
 
+    @SuppressLint("NotifyDataSetChanged")
     @OptIn(ExperimentalGetImage::class)
     fun textAnalize(img : ImageProxy){
         val recognizer = TextRecognition.getClient(KoreanTextRecognizerOptions.Builder().build())
@@ -155,11 +182,13 @@ class CameraActivity : AppCompatActivity() {
             val image = InputImage.fromMediaImage(mediaImage, img.imageInfo.rotationDegrees)
             val result = recognizer.process(image)
                 .addOnSuccessListener { result ->
-                    binding.tvResult.setText("")
+                    itemList.clear()
                     val resultText = result.text
+                    Toast.makeText(this, "OCR Success", Toast.LENGTH_SHORT).show()
                     for (block in result.textBlocks) {
+                        //나중에 추가적인 기능을 위해 나머지 분석 결과도 남겨둠
                         val blockText = block.text
-                        binding.tvResult.text = binding.tvResult.text.toString() + blockText
+                        itemList.add(OCRText(blockText))
                         val blockCornerPoints = block.cornerPoints
                         val blockFrame = block.boundingBox
                         for (line in block.lines) {
@@ -173,6 +202,7 @@ class CameraActivity : AppCompatActivity() {
                             }
                         }
                     }
+                    textAdapter.notifyDataSetChanged()
                     Log.e("OCR", "analyze Success...")
                 }
                 .addOnFailureListener { e ->
