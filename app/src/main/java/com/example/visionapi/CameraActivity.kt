@@ -1,7 +1,6 @@
 package com.example.visionapi
 
 import android.Manifest
-import android.annotation.SuppressLint
 import android.content.ContentValues
 import android.content.Context
 import android.content.pm.PackageManager
@@ -10,10 +9,7 @@ import android.os.Build
 import android.os.Bundle
 import android.provider.MediaStore
 import android.util.Log
-import android.view.View
-import android.widget.AdapterView
-import android.widget.AdapterView.OnItemClickListener
-import android.widget.ListAdapter
+import android.widget.LinearLayout
 import android.widget.TextView
 import android.widget.Toast
 import androidx.activity.enableEdgeToEdge
@@ -30,21 +26,22 @@ import androidx.camera.lifecycle.ProcessCameraProvider
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import com.example.visionapi.databinding.ActivityCameraBinding
 import com.google.mlkit.vision.common.InputImage
 import com.google.mlkit.vision.text.Text
 import com.google.mlkit.vision.text.TextRecognition
 import com.google.mlkit.vision.text.korean.KoreanTextRecognizerOptions
-import kotlinx.coroutines.currentCoroutineContext
+import java.util.ArrayList
 import java.util.Locale
 import java.util.concurrent.ExecutorService
 import java.util.concurrent.Executors
 
 class CameraActivity : AppCompatActivity() {
     lateinit var binding: ActivityCameraBinding
-    lateinit var itemList : ArrayList<OCRText>
-    lateinit var textAdapter: TextAdapter
     private var imageCapture: ImageCapture? = null
+    private lateinit var rv : RecyclerView
+    var data : ArrayList<String> = ArrayList()
 
     private lateinit var cameraExecutor: ExecutorService
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -64,28 +61,21 @@ class CameraActivity : AppCompatActivity() {
             ActivityCompat.requestPermissions(
                 this, REQUIRED_PERMISSIONS, REQUEST_CODE_PERMISSIONS)
         }
-
         cameraExecutor = Executors.newSingleThreadExecutor()
+
+        //recyclerView Binding
+        rv = findViewById<RecyclerView>(R.id.rvResult)
+        rv.layoutManager = LinearLayoutManager(applicationContext)
+        var adapter = OCRRecyclerViewAdapter(data)
+        adapter.setItemClickListener()
+        rv.adapter = adapter
+        rv.adapter.set
 
         binding.btnPhoto.setOnClickListener { takePhoto() }
 
-        //recyclerView 초기화
-        itemList = ArrayList()
-        textAdapter = TextAdapter(itemList)
-        binding.tvResult.layoutManager = LinearLayoutManager(this)
-        binding.tvResult.adapter = textAdapter
-
-        //recyclerView 커스텀 Listener
-        var searcher : SearchItem = SearchItem(this@CameraActivity)
-        textAdapter.setOnItemClickListener(object : TextAdapter.onItemClickListener{
-            override fun onItemClick(view: View, position: Int) {
-                searcher.searchItem(itemList[position])
-            }
-
-        })
-
 
     }
+
     private fun startCamera() {
         val cameraProviderFuture = ProcessCameraProvider.getInstance(this)
 
@@ -124,13 +114,13 @@ class CameraActivity : AppCompatActivity() {
         // Create time stamped name and MediaStore entry.
         val name = SimpleDateFormat(FILENAME_FORMAT, Locale.US)
             .format(System.currentTimeMillis())
-//        val contentValues = ContentValues().apply {
-//            put(MediaStore.MediaColumns.DISPLAY_NAME, name)
-//            put(MediaStore.MediaColumns.MIME_TYPE, "image/jpeg")
-//            if(Build.VERSION.SDK_INT > Build.VERSION_CODES.P) {
-//                put(MediaStore.Images.Media.RELATIVE_PATH, "Pictures/CameraX-Image")
-//            }
-//        }
+        val contentValues = ContentValues().apply {
+            put(MediaStore.MediaColumns.DISPLAY_NAME, name)
+            put(MediaStore.MediaColumns.MIME_TYPE, "image/jpeg")
+            if(Build.VERSION.SDK_INT > Build.VERSION_CODES.P) {
+                put(MediaStore.Images.Media.RELATIVE_PATH, "Pictures/CameraX-Image")
+            }
+        }
 
         imageCapture.takePicture(
             ContextCompat.getMainExecutor(this),
@@ -173,7 +163,6 @@ class CameraActivity : AppCompatActivity() {
 
     }
 
-    @SuppressLint("NotifyDataSetChanged")
     @OptIn(ExperimentalGetImage::class)
     fun textAnalize(img : ImageProxy){
         val recognizer = TextRecognition.getClient(KoreanTextRecognizerOptions.Builder().build())
@@ -182,17 +171,16 @@ class CameraActivity : AppCompatActivity() {
             val image = InputImage.fromMediaImage(mediaImage, img.imageInfo.rotationDegrees)
             val result = recognizer.process(image)
                 .addOnSuccessListener { result ->
-                    itemList.clear()
+                    data.clear()
+                    Toast.makeText(this, "Analyse Success", Toast.LENGTH_SHORT).show()
                     val resultText = result.text
-                    Toast.makeText(this, "OCR Success", Toast.LENGTH_SHORT).show()
                     for (block in result.textBlocks) {
-                        //나중에 추가적인 기능을 위해 나머지 분석 결과도 남겨둠
                         val blockText = block.text
-                        itemList.add(OCRText(blockText))
                         val blockCornerPoints = block.cornerPoints
                         val blockFrame = block.boundingBox
                         for (line in block.lines) {
                             val lineText = line.text
+                            data.add(lineText.toString())
                             val lineCornerPoints = line.cornerPoints
                             val lineFrame = line.boundingBox
                             for (element in line.elements) {
@@ -202,7 +190,7 @@ class CameraActivity : AppCompatActivity() {
                             }
                         }
                     }
-                    textAdapter.notifyDataSetChanged()
+                    rv.adapter?.notifyDataSetChanged()
                     Log.e("OCR", "analyze Success...")
                 }
                 .addOnFailureListener { e ->
