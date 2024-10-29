@@ -1,19 +1,21 @@
 package com.example.visionapi
 
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.LinearLayout
 import android.widget.TextView
+import android.widget.Toast
 import androidx.recyclerview.widget.RecyclerView
 import java.util.ArrayList
 
-class OCRRecyclerViewAdapter(var data : ArrayList<String>) : RecyclerView.Adapter<OCRRecyclerViewAdapter.Holder>() {
-    //외부 listener 저장용
-    lateinit var itemClickListener : OnItemClickListener
+class OCRRecyclerViewAdapter(private var data : ArrayList<String>) : RecyclerView.Adapter<OCRRecyclerViewAdapter.Holder>() {
+
+    private lateinit var itemClickListener : OnItemClickListener
 
     interface OnItemClickListener{
-        fun onClick(h: Holder , position : Int)
+        fun onClick(v: View , position : Int)
     }
 
     inner class Holder(view : View) : RecyclerView.ViewHolder(view){
@@ -36,12 +38,12 @@ class OCRRecyclerViewAdapter(var data : ArrayList<String>) : RecyclerView.Adapte
 
     override fun onBindViewHolder(p0: Holder, position: Int) {
         p0.textView.text = data[position]
-//        p0.item.setOnClickListener{
-//            itemClickListener.onClick(p0, position)
-//        }
+        p0.item.setOnClickListener{
+            itemClickListener.onClick(p0.itemView, position)
+        }
     }
 
-    fun setItemClickListener(onItemClickListener: OnItemClickListener){
+    fun setItemClickListener(onItemClickListener : OnItemClickListener){
         this.itemClickListener = onItemClickListener
     }
 }

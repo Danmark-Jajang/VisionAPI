@@ -3,12 +3,14 @@ package com.example.visionapi
 import android.Manifest
 import android.content.ContentValues
 import android.content.Context
+import android.content.Intent
 import android.content.pm.PackageManager
 import android.icu.text.SimpleDateFormat
 import android.os.Build
 import android.os.Bundle
 import android.provider.MediaStore
 import android.util.Log
+import android.view.View
 import android.widget.LinearLayout
 import android.widget.TextView
 import android.widget.Toast
@@ -67,9 +69,18 @@ class CameraActivity : AppCompatActivity() {
         rv = findViewById<RecyclerView>(R.id.rvResult)
         rv.layoutManager = LinearLayoutManager(applicationContext)
         var adapter = OCRRecyclerViewAdapter(data)
-        adapter.setItemClickListener()
+
+        adapter.apply {
+            this.setItemClickListener(object : OCRRecyclerViewAdapter.OnItemClickListener{
+                override fun onClick(v: View, position: Int) {
+                    var intent = Intent(applicationContext, ResultActivity::class.java)
+                    intent.putExtra("text", data[position])
+                    startActivity(intent)
+                }
+
+            })
+        }
         rv.adapter = adapter
-        rv.adapter.set
 
         binding.btnPhoto.setOnClickListener { takePhoto() }
 

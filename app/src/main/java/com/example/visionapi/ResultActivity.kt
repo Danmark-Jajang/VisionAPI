@@ -21,6 +21,26 @@ class ResultActivity : AppCompatActivity() {
             insets
         }
 
+        var text : String = intent.getStringExtra("text").toString()
+        binding.tvResult.text = text
+
+        var u = getUserAllergy()
+        var r = getProductAllergy()
+
+        if(u.al1==r[0]){
+            binding.tvResult.text = binding.tvResult.text as String + '\n' + "1 true"
+        }
+        else binding.tvResult.text = binding.tvResult.text as String + '\n' + "1 false"
+        if(u.al2==r[1]){
+            binding.tvResult.text = binding.tvResult.text as String + '\n' + "2 true"
+        }
+        else binding.tvResult.text = binding.tvResult.text as String + '\n' + "2 false"
+        if(u.al3==r[2]){
+            binding.tvResult.text = binding.tvResult.text as String + '\n' + "3 true"
+        }
+        else binding.tvResult.text = binding.tvResult.text as String + '\n' + "3 false"
+
+
         binding.btnGoBackCamera.setOnClickListener {
             finish()
         }
