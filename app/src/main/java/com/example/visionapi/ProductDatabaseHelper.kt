@@ -5,11 +5,13 @@ import android.content.Context
 import android.database.sqlite.SQLiteDatabase
 import android.database.sqlite.SQLiteOpenHelper
 
+data class Product(var name: String, var kcal: String, var target: String, var total: String)
+
 class ProductDatabaseHelper(context: Context) : SQLiteOpenHelper(context, DATABASE_NAME, null, DATABASE_VERSION) {
 
     companion object {
         private const val DATABASE_NAME = "mydatabase.db"
-        private const val DATABASE_VERSION = 1
+        private const val DATABASE_VERSION = 2
 
         const val TABLE_PRODUCT = "product"
         const val COLUMN_NAME = "name"
@@ -69,14 +71,29 @@ class ProductDatabaseHelper(context: Context) : SQLiteOpenHelper(context, DATABA
         return products
     }
 
+    fun getProduct(name : String) : Product{
+        val db = readableDatabase
+        val cursor = db.rawQuery("SELECT * FROM Product WHERE name = '"+name+"'", null)
+        val p : Product = Product("1", "1", "1", "1")
+
+        if(cursor != null && cursor.count != 0){
+            while(cursor.moveToNext()){
+                p.name = cursor.getString(0)
+                p.kcal = cursor.getString(1)
+                p.target = cursor.getString(2)
+                p.total = cursor.getString(3)
+
+            }
+        }
+        cursor.close()
+        db.close()
+        return p
+    }
+
     // 데이터 삭제 함수
     fun deleteProduct(name: String) {
         val db = writableDatabase
         db.delete(TABLE_PRODUCT, "$COLUMN_NAME = ?", arrayOf(name))
         db.close()
     }
-
-
-    // 데이터 클래스 정의
-    data class Product(val name: String, val kcal: String, val target: String, val total: String)
 }

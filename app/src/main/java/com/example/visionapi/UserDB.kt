@@ -1,6 +1,7 @@
 package com.example.visionapi
 
 import android.content.Context
+import androidx.room.ColumnInfo
 import androidx.room.Dao
 import androidx.room.Database
 import androidx.room.Entity
@@ -15,9 +16,9 @@ import androidx.room.Update
 @Entity
 data class User(
     @PrimaryKey val uid : Int,
-    val al1 : Boolean,
-    val al2 : Boolean,
-    val al3 : Boolean
+    @ColumnInfo(name = "대두") val al1 : Boolean,
+    @ColumnInfo(name = "새우") val al2 : Boolean,
+    @ColumnInfo(name = "계란") val al3 : Boolean
 )
 
 @Dao
@@ -38,6 +39,7 @@ interface UserDao{
 @Database(entities = [User::class], version = 1)
 abstract class UserDatabase : RoomDatabase(){
     abstract fun UserDao() : UserDao
+
     companion object{
         private var instance : UserDatabase? = null
         @Synchronized

@@ -16,7 +16,7 @@ class DBCheck : AppCompatActivity() {
         textView = findViewById(R.id.textView)
 
         // 데이터 삽입
-        //insertSampleProducts()
+        insertSampleProducts()
 
         // 데이터 삭제 및 화면에 출력
         //deleteSampleProduct()

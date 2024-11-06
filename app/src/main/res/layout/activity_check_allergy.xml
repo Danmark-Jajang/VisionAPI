@@ -16,17 +16,17 @@
         <CheckBox
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="allergy1"
+            android:text="대두"
             android:id="@+id/CbAllergy1"/>
         <CheckBox
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="allergy2"
+            android:text="새우"
             android:id="@+id/CbAllergy2"/>
         <CheckBox
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="allergy3"
+            android:text="계란"
             android:id="@+id/CbAllergy3"/>
     </LinearLayout>
 
