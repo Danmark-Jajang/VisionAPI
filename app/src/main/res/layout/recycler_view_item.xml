@@ -1,13 +1,16 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="100px"
+    android:layout_height="200px"
     android:orientation="horizontal"
+    android:layout_margin="10px"
+    android:background="#66666666"
     android:id="@+id/rvItem">
 
     <TextView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:textSize="50dp"
         android:id="@+id/item_tv"/>
 
 </LinearLayout>

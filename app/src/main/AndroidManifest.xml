@@ -29,6 +29,8 @@
         <activity
             android:name=".CameraActivity"
             android:exported="false" />
+        <activity android:name=".DBCheck"
+            android:exported="false"/>
         <activity
             android:name=".MainActivity"
             android:exported="true">

@@ -190,7 +190,8 @@ class CameraActivity : AppCompatActivity() {
                         val blockCornerPoints = block.cornerPoints
                         val blockFrame = block.boundingBox
                         for (line in block.lines) {
-                            val lineText = line.text
+                            var lineText = line.text
+                            lineText = lineText.replace("[^\\w+]".toRegex(), "")
                             data.add(lineText.toString())
                             val lineCornerPoints = line.cornerPoints
                             val lineFrame = line.boundingBox

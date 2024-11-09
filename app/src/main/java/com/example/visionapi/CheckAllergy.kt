@@ -2,6 +2,7 @@ package com.example.visionapi
 
 import android.content.Context
 import android.os.Bundle
+import android.util.Log
 import android.widget.CheckBox
 import android.widget.Toast
 import androidx.activity.enableEdgeToEdge
@@ -37,19 +38,18 @@ class CheckAllergy : AppCompatActivity() {
         //화면 표시때 유저데이터 없으면 초기화
         val userDB = UserDatabase.getInstance(applicationContext)
         if(userDB!!.UserDao().getUserNum() <= 0){
-            var tmpUser = User(1, false,false,false)
+            var tmpUser = User(1, "", "","")
             userDB.UserDao().insertUser(tmpUser)
         }
 
         //화면 불러올 때 기존 선택한 알러지 불러오기
         setAllergyBox(userDB.UserDao().getUser(1))
-        Toast.makeText(this, userDB.UserDao().getUser(1).toString(), Toast.LENGTH_SHORT)
-            .show()
+        Log.e("Allergy", "User allergy loaded")
 
         //설정해둔 알러지 저장
         binding.BtnSaveInfo.setOnClickListener{
             userDB.UserDao().updateUser(checkAllergyBox())
-            Toast.makeText(this, userDB.UserDao().getUser(1).toString(), Toast.LENGTH_SHORT)
+            Toast.makeText(this, "알러지가 수정되었습니다!", Toast.LENGTH_SHORT)
                 .show()
         }
 
@@ -64,11 +64,11 @@ class CheckAllergy : AppCompatActivity() {
         val cb2 = findViewById<CheckBox>(R.id.CbAllergy2)
         val cb3 = findViewById<CheckBox>(R.id.CbAllergy3)
         var cbArray = arrayOf(cb1, cb2, cb3)
-        var alArray = arrayOf(false, false, false)
+        var alArray = arrayOf("", "", "")
 
         for(i in cbArray){
             if(i.isChecked){
-                alArray[cbArray.indexOf(i)] = true
+                alArray[cbArray.indexOf(i)] = cbArray[cbArray.indexOf(i)].text.toString()
             }
         }
 
@@ -84,7 +84,7 @@ class CheckAllergy : AppCompatActivity() {
         var alArray = arrayOf(user.al1, user.al2, user.al3)
 
         for(i in 0..2){
-            if(alArray[i]){
+            if(alArray[i] != ""){
                 cbArray[i].isChecked = true
             }
         }

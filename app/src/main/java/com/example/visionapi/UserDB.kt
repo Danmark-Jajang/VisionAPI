@@ -16,9 +16,9 @@ import androidx.room.Update
 @Entity
 data class User(
     @PrimaryKey val uid : Int,
-    @ColumnInfo(name = "대두") val al1 : Boolean,
-    @ColumnInfo(name = "새우") val al2 : Boolean,
-    @ColumnInfo(name = "계란") val al3 : Boolean
+    @ColumnInfo(name = "대두") val al1 : String,
+    @ColumnInfo(name = "새우") val al2 : String,
+    @ColumnInfo(name = "계란") val al3 : String
 )
 
 @Dao

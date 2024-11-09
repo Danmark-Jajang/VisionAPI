@@ -12,11 +12,20 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical"
+        android:id="@+id/llResult"
         android:layout_weight="1">
         <TextView
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:id="@+id/tvResult"/>
+            android:id="@+id/tvAnalize"
+            android:textAlignment="center"
+            android:layout_weight="6"/>
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:id="@+id/tvResult"
+            android:textSize="30dp"
+            android:layout_weight="1"/>
     </LinearLayout>
 
     <LinearLayout

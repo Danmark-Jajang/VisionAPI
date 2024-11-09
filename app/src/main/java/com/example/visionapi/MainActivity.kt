@@ -29,6 +29,11 @@ class MainActivity : AppCompatActivity() {
             var intent = Intent(this, CheckAllergy::class.java)
             startActivity(intent)
         }
+
+        binding.btnDBCheck.setOnClickListener{
+            var intent = Intent(this, DBCheck::class.java)
+            startActivity(intent)
+        }
     }
 }
 

@@ -1,5 +1,6 @@
 package com.example.visionapi
 
+import android.graphics.Color
 import android.os.Bundle
 import android.util.Log
 import android.widget.Toast
@@ -28,20 +29,39 @@ class ResultActivity : AppCompatActivity() {
         //Camera Activity에서 가져온 String 가져오기
         val text : String = intent.getStringExtra("text").toString()
         dbHelper = ProductDatabaseHelper(this)
-        binding.tvResult.text = text
 
-        var p : Product = dbHelper.getProduct("새우깡")
-        Toast.makeText(this, p.name, Toast.LENGTH_SHORT).show()
-        Log.e("Result", "Product loaded")
-        val ua = getUserAllergy()
-        Log.e("Result", "User Allergy loaded")
+        //제품 결과 출력
+        var p : Product = dbHelper.getProduct(text)
+        //제품 유무 검사
+        if(p.name != "1"){
+            binding.tvAnalize.text = p.name
+            Log.e("Result", "Product loaded")
 
-        when(p.target){
-            "대두" -> if(ua[0]){binding.tvResult.text = binding.tvResult.text.toString() + "대두알러지 조심!\n"}
-            "새우" -> if(ua[1]){binding.tvResult.text = binding.tvResult.text.toString() + "새우알러지 조심!\n"}
-            "계란" -> if(ua[2]){binding.tvResult.text = binding.tvResult.text.toString() + "계란알러지 조심!\n"}
-            else -> {binding.tvResult.text = binding.tvResult.text.toString() + "알러지 걱정 없습니다\n"}
+            //유저 알러지 정보 조회
+            val ua = getUserAllergy()
+            Log.e("Result", "User Allergy loaded")
+
+            //사용자 알러지 비교
+            var flag = false
+            for(u in ua){
+                if(u != ""){
+                    if(p.target == u){
+                        binding.tvResult.text = binding.tvResult.text.toString() + u + " : " + "O\n"
+                        flag = true
+                    }
+                    else{
+                        binding.tvResult.text = binding.tvResult.text.toString() + u + " : " + "X\n"
+                    }
+                }
+            }
+            if(flag){
+                binding.tvAnalize.setBackgroundColor(Color.MAGENTA)
+            }
         }
+        else{
+            binding.tvAnalize.text = "검색된 내용이 없습니다..."
+        }
+
 
 
         binding.btnGoBackCamera.setOnClickListener {
@@ -50,7 +70,8 @@ class ResultActivity : AppCompatActivity() {
 
     }
 
-    fun getUserAllergy() : Array<Boolean> {
+    //유저 알러지 조회
+    fun getUserAllergy() : Array<String> {
         val u = UserDatabase.getInstance(this)!!.UserDao().getUser(1)
         return arrayOf(u.al1, u.al2, u.al3)
     }
