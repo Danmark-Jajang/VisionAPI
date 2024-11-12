@@ -90,6 +90,23 @@ class ProductDatabaseHelper(context: Context) : SQLiteOpenHelper(context, DATABA
         return p
     }
 
+    fun getProductsName(): List<String> {
+        val db = readableDatabase
+        val cursor = db.query(TABLE_PRODUCT, null, null, null, null, null, null)
+        val products = mutableListOf<String>()
+
+        with(cursor) {
+            while (moveToNext()) {
+                val name = getString(getColumnIndexOrThrow(COLUMN_NAME))
+                products.add(name)
+            }
+        }
+        cursor.close()
+        db.close()
+
+        return products
+    }
+
     // 데이터 삭제 함수
     fun deleteProduct(name: String) {
         val db = writableDatabase

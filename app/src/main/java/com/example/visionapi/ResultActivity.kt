@@ -30,8 +30,19 @@ class ResultActivity : AppCompatActivity() {
         val text : String = intent.getStringExtra("text").toString()
         dbHelper = ProductDatabaseHelper(this)
 
+        val name : List<String> = dbHelper.getProductsName()
+
+        val jaroWinkler = JaroWinkler()
+        var serch = ""
+        for(n in name){
+            //유사도
+            if(jaroWinkler.similarity(n, text) > 0.8){
+                serch = n
+            }
+        }
+
         //제품 결과 출력
-        var p : Product = dbHelper.getProduct(text)
+        var p : Product = dbHelper.getProduct(serch)
         //제품 유무 검사
         if(p.name != "1"){
             binding.tvAnalize.text = p.name

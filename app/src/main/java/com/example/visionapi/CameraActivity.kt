@@ -1,6 +1,7 @@
 package com.example.visionapi
 
 import android.Manifest
+import android.annotation.SuppressLint
 import android.content.ContentValues
 import android.content.Context
 import android.content.Intent
@@ -174,6 +175,7 @@ class CameraActivity : AppCompatActivity() {
 
     }
 
+    @SuppressLint("NotifyDataSetChanged")
     @OptIn(ExperimentalGetImage::class)
     fun textAnalize(img : ImageProxy){
         val recognizer = TextRecognition.getClient(KoreanTextRecognizerOptions.Builder().build())
@@ -184,22 +186,11 @@ class CameraActivity : AppCompatActivity() {
                 .addOnSuccessListener { result ->
                     data.clear()
                     Toast.makeText(this, "Analyse Success", Toast.LENGTH_SHORT).show()
-                    val resultText = result.text
                     for (block in result.textBlocks) {
-                        val blockText = block.text
-                        val blockCornerPoints = block.cornerPoints
-                        val blockFrame = block.boundingBox
                         for (line in block.lines) {
                             var lineText = line.text
                             lineText = lineText.replace("[^\\w+]".toRegex(), "")
-                            data.add(lineText.toString())
-                            val lineCornerPoints = line.cornerPoints
-                            val lineFrame = line.boundingBox
-                            for (element in line.elements) {
-                                val elementText = element.text
-                                val elementCornerPoints = element.cornerPoints
-                                val elementFrame = element.boundingBox
-                            }
+                            data.add(lineText)
                         }
                     }
                     rv.adapter?.notifyDataSetChanged()
