@@ -34,16 +34,21 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical">
-        <Button
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:id="@+id/BtnSaveInfo"
-            android:text="저장하기"/>
-        <Button
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:id="@+id/BtnGoBackMain"
-            android:text="돌아가기"/>
+            android:orientation="vertical">
+            <Button
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/BtnSaveInfo"
+                android:text="저장하기"/>
+            <Button
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/BtnGoBackMain"
+                android:text="돌아가기"/>
+        </LinearLayout>
     </LinearLayout>
 
 

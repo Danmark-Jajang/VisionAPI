@@ -34,6 +34,9 @@ interface UserDao{
 
     @Query("SELECT * FROM User WHERE uid=:uid")
     fun getUser(uid : Int) : User
+
+    @Query("SELECT uid FROM User")
+    fun getUsers() : Array<Int>
 }
 
 @Database(entities = [User::class], version = 1)
