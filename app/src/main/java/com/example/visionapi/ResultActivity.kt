@@ -1,10 +1,12 @@
 package com.example.visionapi
 
+import android.annotation.SuppressLint
+import android.content.DialogInterface
 import android.graphics.Color
 import android.os.Bundle
 import android.util.Log
-import android.widget.Toast
 import androidx.activity.enableEdgeToEdge
+import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
@@ -32,21 +34,25 @@ class ResultActivity : AppCompatActivity() {
         val name : List<String> = dbHelper.getProductsName()
         val jaroWinkler = JaroWinkler()
         //검색 결과가 serch에 들어갈 예정, 유사한 결과가 없으면 그대로
-        var serch = ""
+        var search = ""
         var sim = 0.8
         for(n in name){
             //유사도 80%이상일 때 검색
             if(jaroWinkler.similarity(n, text) > sim){
-                serch = n
+                search = n
                 sim = jaroWinkler.similarity(n, text)
             }
         }
 
+        //TEST용 CODE
+        search = "새우깡"
+
         //제품 결과 출력
-        var p : Product = dbHelper.getProduct(serch)
+        var p : Product = dbHelper.getProduct(search)
         //제품 유무 검사
+        val allist = mutableListOf<String>()
         if(p.name != "1"){
-            binding.tvAnalize.text = p.name
+            binding.tvAnalize.text = p.name + "의 검색결과"
             Log.e("Result", "Product loaded")
 
             //유저 알러지 정보 조회
@@ -58,22 +64,33 @@ class ResultActivity : AppCompatActivity() {
             for(u in ua){
                 if(u != ""){
                     if(p.target == u){
-                        binding.tvResult.text = binding.tvResult.text.toString() + u + " : " + "O\n"
+                        binding.tvResult.text = "알러지가 검출되었습니다!!!!"
+                        allist.add(p.target)
                         flag = true
-                    }
-                    else{
-                        binding.tvResult.text = binding.tvResult.text.toString() + u + " : " + "X\n"
                     }
                 }
             }
             if(flag){
-                binding.tvAnalize.setBackgroundColor(Color.MAGENTA)
+                binding.tvAnalize.setBackgroundColor(Color.rgb(251, 177, 162))
             }
         }
         else{
-            binding.tvAnalize.text = "검색된 내용이 없습니다..."
+            binding.tvResult.text = "검색된 내용이 없습니다..."
         }
 
+        binding.btnDetail.setOnClickListener{
+            AlertDialog.Builder(this)
+                .setTitle("자세히 보기")
+                .setMessage(getMessage(allist))
+                .setNegativeButton("닫기", object : DialogInterface.OnClickListener {
+                    override fun onClick(dialog: DialogInterface?, which: Int) {
+                        //아무것도 하지 않고 닫기
+                    }
+
+                })
+                .create()
+                .show()
+        }
 
 
         binding.btnGoBackCamera.setOnClickListener {
@@ -83,8 +100,16 @@ class ResultActivity : AppCompatActivity() {
     }
 
     //유저 알러지 조회
-    fun getUserAllergy() : Array<String> {
+    private fun getUserAllergy() : Array<String> {
         val u = UserDatabase.getInstance(this)!!.UserDao().getUser(1)
         return arrayOf(u.al1, u.al2, u.al3)
+    }
+
+    fun getMessage(list: MutableList<String>) : String {
+        var rtn : String = ""
+        for(n in list){
+            rtn += n + "이/가 식별되었습니다\n"
+        }
+        return rtn
     }
 }

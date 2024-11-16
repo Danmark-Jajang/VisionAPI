@@ -41,6 +41,8 @@ android {
 }
 
 dependencies {
+    implementation(libs.androidx.legacy.support.v4)
+    implementation(libs.androidx.recyclerview)
     val camerax_version = "1.3.4"
     val room_version = "2.6.1"
     implementation(libs.androidx.core.ktx)
