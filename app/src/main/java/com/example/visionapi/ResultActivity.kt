@@ -9,8 +9,6 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import com.example.visionapi.databinding.ActivityResultBinding
-import java.util.ArrayList
-import java.util.Random
 
 class ResultActivity : AppCompatActivity() {
     lateinit var binding: ActivityResultBinding
@@ -30,14 +28,17 @@ class ResultActivity : AppCompatActivity() {
         val text : String = intent.getStringExtra("text").toString()
         dbHelper = ProductDatabaseHelper(this)
 
+        //문자열 유사도 분석으로 최대한 비슷한 제품 검색
         val name : List<String> = dbHelper.getProductsName()
-
         val jaroWinkler = JaroWinkler()
+        //검색 결과가 serch에 들어갈 예정, 유사한 결과가 없으면 그대로
         var serch = ""
+        var sim = 0.8
         for(n in name){
-            //유사도
-            if(jaroWinkler.similarity(n, text) > 0.8){
+            //유사도 80%이상일 때 검색
+            if(jaroWinkler.similarity(n, text) > sim){
                 serch = n
+                sim = jaroWinkler.similarity(n, text)
             }
         }
 

@@ -8,47 +8,128 @@
     android:orientation="vertical"
     tools:context=".CheckAllergy">
 
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:fillViewport="true"
+        android:layout_weight="100">
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical">
+            <CheckBox
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="대두"
+                android:id="@+id/cb1"/>
+            <CheckBox
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="새우"
+                android:id="@+id/cb2"/>
+            <CheckBox
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="계란"
+                android:id="@+id/cb3"/>
+            <CheckBox
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="소고기"
+                android:id="@+id/cb4"/>
+            <CheckBox
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="돼지고기"
+                android:id="@+id/cb5"/>
+            <CheckBox
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="닭고기"
+                android:id="@+id/cb6"/>
+            <CheckBox
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="게"
+                android:id="@+id/cb7"/>
+            <CheckBox
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="오징어"
+                android:id="@+id/cb8"/>
+            <CheckBox
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="고등어"
+                android:id="@+id/cb9"/>
+            <CheckBox
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="조개"
+                android:id="@+id/cb10"/>
+            <CheckBox
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="우유"
+                android:id="@+id/cb11"/>
+            <CheckBox
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="땅콩"
+                android:id="@+id/cb12"/>
+            <CheckBox
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="호두"
+                android:id="@+id/cb13"/>
+            <CheckBox
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="잣"
+                android:id="@+id/cb14"/>
+            <CheckBox
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="복숭아"
+                android:id="@+id/cb15"/>
+            <CheckBox
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="토마토"
+                android:id="@+id/cb16"/>
+            <CheckBox
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="밀"
+                android:id="@+id/cb17"/>
+            <CheckBox
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="메밀"
+                android:id="@+id/cb18"/>
+            <CheckBox
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="아황산류"
+                android:id="@+id/cb19"/>
+        </LinearLayout>
+    </ScrollView>
+
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical"
         android:layout_weight="1">
-        <CheckBox
+        <Button
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="대두"
-            android:id="@+id/CbAllergy1"/>
-        <CheckBox
+            android:id="@+id/BtnSaveInfo"
+            android:text="저장하기"/>
+        <Button
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="새우"
-            android:id="@+id/CbAllergy2"/>
-        <CheckBox
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="계란"
-            android:id="@+id/CbAllergy3"/>
-    </LinearLayout>
-
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="vertical">
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="vertical">
-            <Button
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:id="@+id/BtnSaveInfo"
-                android:text="저장하기"/>
-            <Button
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:id="@+id/BtnGoBackMain"
-                android:text="돌아가기"/>
-        </LinearLayout>
+            android:id="@+id/BtnGoBackMain"
+            android:text="돌아가기"/>
     </LinearLayout>
 
 
