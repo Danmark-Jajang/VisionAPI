@@ -14,10 +14,6 @@ class JaroWinkler(private val threshold: Double = 0.7) {
         return if (sj > threshold) sj + p * l * (1 - sj) else sj
     }
 
-    fun distance(first: String, second: String): Double {
-        return 1.0 - similarity(first, second)
-    }
-
     private fun matchStrings(first: String, second: String): Match {
         val min = minOf(first, second)
         val max = maxOf(first, second)

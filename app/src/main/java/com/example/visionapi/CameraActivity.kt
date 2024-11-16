@@ -3,7 +3,6 @@ package com.example.visionapi
 import android.Manifest
 import android.annotation.SuppressLint
 import android.content.ContentValues
-import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.icu.text.SimpleDateFormat
@@ -12,15 +11,12 @@ import android.os.Bundle
 import android.provider.MediaStore
 import android.util.Log
 import android.view.View
-import android.widget.LinearLayout
-import android.widget.TextView
 import android.widget.Toast
 import androidx.activity.enableEdgeToEdge
 import androidx.annotation.OptIn
 import androidx.appcompat.app.AppCompatActivity
 import androidx.camera.core.CameraSelector
 import androidx.camera.core.ExperimentalGetImage
-import androidx.camera.core.ImageAnalysis
 import androidx.camera.core.ImageCapture
 import androidx.camera.core.ImageCaptureException
 import androidx.camera.core.ImageProxy
@@ -32,9 +28,9 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.visionapi.databinding.ActivityCameraBinding
 import com.google.mlkit.vision.common.InputImage
-import com.google.mlkit.vision.text.Text
 import com.google.mlkit.vision.text.TextRecognition
 import com.google.mlkit.vision.text.korean.KoreanTextRecognizerOptions
+import java.nio.ByteBuffer
 import java.util.ArrayList
 import java.util.Locale
 import java.util.concurrent.ExecutorService
@@ -71,6 +67,7 @@ class CameraActivity : AppCompatActivity() {
         rv.layoutManager = LinearLayoutManager(applicationContext)
         var adapter = OCRRecyclerViewAdapter(data)
 
+        //분석 결과 클릭시 결과창 이동
         adapter.apply {
             this.setItemClickListener(object : OCRRecyclerViewAdapter.OnItemClickListener{
                 override fun onClick(v: View, position: Int) {
@@ -149,11 +146,13 @@ class CameraActivity : AppCompatActivity() {
         )
     }
 
+    //권한 확인용
     private fun allPermissionsGranted() = REQUIRED_PERMISSIONS.all {
         ContextCompat.checkSelfPermission(
             baseContext, it) == PackageManager.PERMISSION_GRANTED
     }
 
+    //카메라 종료
     override fun onDestroy() {
         super.onDestroy()
         cameraExecutor.shutdown()
