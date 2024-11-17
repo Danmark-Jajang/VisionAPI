@@ -28,6 +28,8 @@ class DBCheck : AppCompatActivity() {
         dbHelper.insertProduct("계란과자", "205kcal", "계란", "45g")
         dbHelper.insertProduct("꿀꽈배기", "450Kcal", "우유", "90g")
         dbHelper.insertProduct("새우깡", "515Kcal", "새우", "400g")
+        dbHelper.insertProduct("타이레놀", "..", "아세트아미노펜","..")
+        dbHelper.insertProduct("이부프로펜", "..", "나프록센", "..")
     }
 
     private fun deleteSampleProduct() {
@@ -35,6 +37,8 @@ class DBCheck : AppCompatActivity() {
         dbHelper.deleteProduct("계란과자")
         dbHelper.deleteProduct("꿀꽈배기")
         dbHelper.deleteProduct("새우깡")
+        dbHelper.deleteProduct("타이레놀")
+        dbHelper.deleteProduct("이부프로펜")
     }
 
     private fun displayProducts() {
@@ -47,6 +51,7 @@ class DBCheck : AppCompatActivity() {
             productListString.append("${product.name}, ${product.kcal}, ${product.target}, ${product.total}\n")
         }
         textView.text = productListString.toString()
+        productListString.clear()
 
     }
 }

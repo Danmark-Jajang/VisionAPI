@@ -35,26 +35,23 @@ class ResultActivity : AppCompatActivity() {
         val jaroWinkler = JaroWinkler()
         //검색 결과가 serch에 들어갈 예정, 유사한 결과가 없으면 그대로
         var search = ""
-        var sim = 0.8
         for(n in name){
             //유사도 80%이상일 때 검색
-            if(jaroWinkler.similarity(n, text) > sim){
+            if(jaroWinkler.similarity(n, text) > 0.8){
                 search = n
-                sim = jaroWinkler.similarity(n, text)
             }
         }
 
         //TEST용 CODE
-        //search = "새우깡"
+        //search = "이부프로펜"
 
         //제품 결과 출력
-        var p : Product = dbHelper.getProduct(search)
+        val p : Product = dbHelper.getProduct(search)
         //제품 유무 검사
         val allist = mutableListOf<String>()
+        binding.tvAnalize.text = search + "의 검색결과"
         if(p.name != "1"){
-            binding.tvAnalize.text = p.name + "의 검색결과"
             Log.e("Result", "Product loaded")
-
             //유저 알러지 정보 조회
             val ua = getUserAllergy()
             Log.e("Result", "User Allergy loaded")
@@ -78,6 +75,7 @@ class ResultActivity : AppCompatActivity() {
             binding.tvResult.text = "검색된 내용이 없습니다..."
         }
 
+        //자세히 보기 Dialog
         binding.btnDetail.setOnClickListener{
             AlertDialog.Builder(this)
                 .setTitle("자세히 보기")
@@ -92,21 +90,23 @@ class ResultActivity : AppCompatActivity() {
                 .show()
         }
 
-
+        //닫기 버
         binding.btnGoBackCamera.setOnClickListener {
             finish()
         }
 
     }
 
-    //유저 알러지 조회
+    //유저 알러지만 조회
     private fun getUserAllergy() : Array<String> {
-        val u = UserDatabase.getInstance(this)!!.UserDao().getUser(1)
-        return arrayOf(u.al1, u.al2, u.al3)
+        val user = UserDatabase.getInstance(this)!!.UserDao().getUser(1)
+        return arrayOf(user.al1, user.al2, user.al3, user.al4, user.al5, user.al6, user.al7, user.al8, user.al9, user.al10,
+            user.al11, user.al12, user.al13, user.al14, user.al15, user.al16, user.al17, user.al18, user.al19, user.al20, user.al21)
     }
 
     fun getMessage(list: MutableList<String>) : String {
         var rtn : String = ""
+        if(list.size == 0) return "인식된 내용이 없거나 DB에 없습니다...\n"
         for(n in list){
             rtn += n + "이/가 식별되었습니다\n"
         }

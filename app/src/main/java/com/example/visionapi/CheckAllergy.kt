@@ -39,7 +39,7 @@ class CheckAllergy : AppCompatActivity() {
         val userDB = UserDatabase.getInstance(applicationContext)
         if(userDB!!.UserDao().getUserNum() <= 0){
             var tmpUser = User(1, "", "","","","","","","","","","","","","","",""
-                ,"","","")
+                ,"","","","","")
             userDB.UserDao().insertUser(tmpUser)
         }
 
@@ -80,11 +80,12 @@ class CheckAllergy : AppCompatActivity() {
         val cb17 = findViewById<CheckBox>(R.id.cb17)
         val cb18 = findViewById<CheckBox>(R.id.cb18)
         val cb19 = findViewById<CheckBox>(R.id.cb19)
+        val cb20 = findViewById<CheckBox>(R.id.cb20)
+        val cb21 = findViewById<CheckBox>(R.id.cb21)
 
 
-
-        var cbArray = arrayOf(cb1, cb2, cb3, cb4, cb5, cb6, cb7, cb8, cb9, cb10, cb11, cb12, cb13, cb14, cb15, cb16, cb17, cb18, cb19)
-        var alArray = arrayOf("", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "")
+        var cbArray = arrayOf(cb1, cb2, cb3, cb4, cb5, cb6, cb7, cb8, cb9, cb10, cb11, cb12, cb13, cb14, cb15, cb16, cb17, cb18, cb19, cb20, cb21)
+        var alArray = arrayOf("", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "")
 
         for(i in cbArray){
             if(i.isChecked){
@@ -93,7 +94,8 @@ class CheckAllergy : AppCompatActivity() {
         }
 
         val u : User = User(1, alArray[0], alArray[1], alArray[2], alArray[3], alArray[4], alArray[5], alArray[6], alArray[7], alArray[8]
-            , alArray[9], alArray[10], alArray[11], alArray[12], alArray[13], alArray[14], alArray[15], alArray[16], alArray[17], alArray[18])
+            , alArray[9], alArray[10], alArray[11], alArray[12], alArray[13], alArray[14], alArray[15], alArray[16], alArray[17], alArray[18],
+            alArray[19], alArray[20])
         return u
     }
 
@@ -117,11 +119,13 @@ class CheckAllergy : AppCompatActivity() {
         val cb17 = findViewById<CheckBox>(R.id.cb17)
         val cb18 = findViewById<CheckBox>(R.id.cb18)
         val cb19 = findViewById<CheckBox>(R.id.cb19)
-        var cbArray = arrayOf(cb1, cb2, cb3, cb4, cb5, cb6, cb7, cb8, cb9, cb10, cb11, cb12, cb13, cb14, cb15, cb16, cb17, cb18, cb19)
+        val cb20 = findViewById<CheckBox>(R.id.cb20)
+        val cb21 = findViewById<CheckBox>(R.id.cb21)
+        var cbArray = arrayOf(cb1, cb2, cb3, cb4, cb5, cb6, cb7, cb8, cb9, cb10, cb11, cb12, cb13, cb14, cb15, cb16, cb17, cb18, cb19, cb20, cb21)
         var alArray = arrayOf(user.al1, user.al2, user.al3, user.al4, user.al5, user.al6, user.al7, user.al8, user.al9, user.al10,
-            user.al11, user.al12, user.al13, user.al14, user.al15, user.al16, user.al17, user.al18, user.al19)
+            user.al11, user.al12, user.al13, user.al14, user.al15, user.al16, user.al17, user.al18, user.al19, user.al20, user.al21)
 
-        for(i in 0..18){
+        for(i in 0..cbArray.size-1){
             if(alArray[i] != ""){
                 cbArray[i].isChecked = true
             }

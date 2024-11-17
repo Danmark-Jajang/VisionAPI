@@ -112,6 +112,16 @@
                 android:layout_height="wrap_content"
                 android:text="아황산류"
                 android:id="@+id/cb19"/>
+            <CheckBox
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="아세트아미노펜"
+                android:id="@+id/cb20"/>
+            <CheckBox
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="나프록센"
+                android:id="@+id/cb21"/>
         </LinearLayout>
     </ScrollView>
 

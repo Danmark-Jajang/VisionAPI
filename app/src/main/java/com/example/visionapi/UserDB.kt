@@ -35,6 +35,8 @@ data class User(
     @ColumnInfo(name = "밀") val al17 : String,
     @ColumnInfo(name = "메밀") val al18 : String,
     @ColumnInfo(name = "아황산류") val al19 : String,
+    @ColumnInfo(name = "아세트아미노펜") val al20 : String,
+    @ColumnInfo(name = "나프록센") val al21 : String,
 )
 
 @Dao
