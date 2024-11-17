@@ -45,7 +45,7 @@ class ResultActivity : AppCompatActivity() {
         }
 
         //TEST용 CODE
-        search = "새우깡"
+        //search = "새우깡"
 
         //제품 결과 출력
         var p : Product = dbHelper.getProduct(search)
